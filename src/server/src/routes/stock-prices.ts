@@ -21,7 +21,5 @@ export const listStockPrices = async (req: Request, res: Response) => {
 
   const response = await Promise.all(promises);
 
-  console.log('@##$$', response);
-
   res.json({ stockPrices: response });
 };

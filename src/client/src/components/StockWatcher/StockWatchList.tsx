@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Box, Button, Skeleton, Stack } from '@mui/material';
+import React, { useMemo, useState } from 'react';
+import { Box, Button, CircularProgress, Skeleton, Stack } from '@mui/material';
 
 import { WatchedStockWithInfo } from 'types';
 import { useWatchedStocks } from 'hooks/useWatchedStocks';
@@ -18,6 +18,25 @@ const StockWatchList: React.FC<Props> = () => {
 
   const { stockPrices, isPolling } = usePollStockPrices(watchedStocks.map((stock) => stock.symbol));
 
+  const processedWatchedStocks = useMemo(
+    () =>
+      watchedStocks.map((watchedStock) => {
+        const ticker = stockTickers?.find(
+          (stockTicker) => stockTicker.symbol === watchedStock.symbol,
+        );
+        const stockPrice = stockPrices?.find(
+          (stockPrice) => stockPrice.symbol === watchedStock.symbol,
+        );
+
+        return {
+          ...watchedStock,
+          name: ticker?.name || 'N/A',
+          price: stockPrice?.price || null,
+        } as WatchedStockWithInfo;
+      }),
+    [watchedStocks, stockTickers, stockPrices],
+  );
+
   if (isStockTickerPending || isWatchedStocksPending) {
     return <Skeleton width={'100%'} height={500} />;
   }
@@ -26,21 +45,11 @@ const StockWatchList: React.FC<Props> = () => {
     setOpenAddWatchedStockDialog(true);
   };
 
-  const processedWatchedStocks = watchedStocks.map((watchedStock) => {
-    const ticker = stockTickers?.find((stockTicker) => stockTicker.symbol === watchedStock.symbol);
-    const stockPrice = stockPrices?.find((stockPrice) => stockPrice.symbol === watchedStock.symbol);
-
-    return {
-      ...watchedStock,
-      name: ticker?.name || 'N/A',
-      price: stockPrice?.price,
-    } as WatchedStockWithInfo;
-  });
-
   return (
     <>
       <Stack spacing={2} marginTop={4}>
         <Box display={'flex'} justifyContent={'flex-end'}>
+          {isPolling && <CircularProgress />}
           <Button variant={'contained'} onClick={handleAddWatchStock} size="large">
             Add
           </Button>
