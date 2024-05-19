@@ -75,6 +75,12 @@ We're looking forward to seeing your approach to solving this challenge!
     cd src/server/src
     npx knex migrate:make create_users_table
     npx knex migrate:latest
+
+    // Rollback last migration
+    npx knex migrate:down
+
+    // Run next migration
+    npx knex migrate:up
 ```
 
 ### Seed
@@ -84,26 +90,3 @@ We're looking forward to seeing your approach to solving this challenge!
     npx knex seed:make 01-users
     npx knex seed:run
 ```
-
-## Requirements
-
-##Take-Home Assignment: Real-Time Stock Dashboard
-
-### Please create a Github repo and share the link when ready.
-
-SQL
-Database Schema: Write a SQL query to create the necessary table(s) for the watchlist. Include fields like stock symbol, added timestamp, etc.
-Data Retrieval: Write a SQL query to fetch the list of stocks from the watchlist.
-
-Additional Requirements
-Include a README file with clear instructions on how to set up and run the application.
-Write clean, modular, and well-documented code.
-Ensure the application is robust and handles edge cases gracefully.
-Bonus points for implementing user management!
-Evaluation Criteria
-Code organization and clarity.
-Correct implementation of RESTful principles and WebSocket/polling mechanism.
-Effective use of SQL for data storage and retrieval.
-Functionality of the React.js frontend, including real-time updates.
-Error handling and user experience considerations.
-This assignment is designed to evaluate your skills in backend and frontend development, as well as your ability to work with SQL databases and real-time data. We're looking forward to seeing your approach to solving this challenge!
