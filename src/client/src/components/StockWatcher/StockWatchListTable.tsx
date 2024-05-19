@@ -26,7 +26,7 @@ const StockWatchListTable: React.FC<Props> = ({ watchedStocks }) => {
             <TableCell>
               <strong>Name</strong>
             </TableCell>
-            <TableCell align="right">
+            <TableCell align="right" sx={{ width: '100px' }}>
               <strong>Price</strong>
             </TableCell>
           </TableRow>
@@ -39,7 +39,9 @@ const StockWatchListTable: React.FC<Props> = ({ watchedStocks }) => {
                   <Chip color="warning" label={row.symbol} />
                 </TableCell>
                 <TableCell>{row.name}</TableCell>
-                <TableCell align="right">{`$${row.price}` || 'N/A'}</TableCell>
+                <TableCell align="right" sx={{ width: '100px' }}>
+                  {row.price ? `$${row.price}` : 'N/A'}
+                </TableCell>
               </TableRow>
             );
           })}
