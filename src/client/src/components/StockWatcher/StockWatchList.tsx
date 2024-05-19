@@ -1,25 +1,13 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Button,
-  Card,
-  Chip,
-  Divider,
-  Skeleton,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Skeleton, Stack } from '@mui/material';
 
+import { WatchedStockWithInfo } from 'types';
 import { useWatchedStocks } from 'hooks/useWatchedStocks';
 import { usePollStockPrices } from 'hooks/usePollStockPrices';
 import { useStockTickers } from 'hooks/useStockTickers';
+
 import AddWatchedStockDialog from './AddWatchedStockDialog';
+import StockWatchListTable from './StockWatchListTable';
 
 type Props = {};
 
@@ -38,6 +26,17 @@ const StockWatchList: React.FC<Props> = () => {
     setOpenAddWatchedStockDialog(true);
   };
 
+  const processedWatchedStocks = watchedStocks.map((watchedStock) => {
+    const ticker = stockTickers?.find((stockTicker) => stockTicker.symbol === watchedStock.symbol);
+    const stockPrice = stockPrices?.find((stockPrice) => stockPrice.symbol === watchedStock.symbol);
+
+    return {
+      ...watchedStock,
+      name: ticker?.name || 'N/A',
+      price: stockPrice?.price,
+    } as WatchedStockWithInfo;
+  });
+
   return (
     <>
       <Stack spacing={2} marginTop={4}>
@@ -46,42 +45,7 @@ const StockWatchList: React.FC<Props> = () => {
             Add
           </Button>
         </Box>
-        <TableContainer component={Card}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <strong>Symbol</strong>
-                </TableCell>
-                <TableCell>
-                  <strong>Name</strong>
-                </TableCell>
-                <TableCell align="right">
-                  <strong>Price</strong>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {watchedStocks.map((row) => {
-                const ticker = stockTickers?.find(
-                  (stockTicker) => stockTicker.symbol === row.symbol,
-                );
-                const stockPrice = stockPrices?.find(
-                  (stockPrice) => stockPrice.symbol === row.symbol,
-                );
-                return (
-                  <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell component="th" scope="row">
-                      <Chip color="warning" label={row.symbol} />
-                    </TableCell>
-                    <TableCell>{ticker?.name}</TableCell>
-                    <TableCell align="right">{`$${stockPrice?.price}` || 'N/A'}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <StockWatchListTable watchedStocks={processedWatchedStocks} />
       </Stack>
       {openAddWatchedStockDialog && (
         <AddWatchedStockDialog onClose={() => setOpenAddWatchedStockDialog(false)} />

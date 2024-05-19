@@ -12,3 +12,10 @@ export type StockPrice = {
   symbol: string;
   price: number;
 };
+
+export type WatchedStockWithInfo = {
+  id: number;
+  symbol: string;
+  name: string;
+  price: number;
+};
