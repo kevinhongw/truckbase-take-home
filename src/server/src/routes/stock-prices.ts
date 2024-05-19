@@ -19,7 +19,9 @@ export const listStockPrices = async (req: Request, res: Response) => {
     promises.push(generateRandomStockPrice(symbol));
   }
 
-  const response = Promise.all(promises);
+  const response = await Promise.all(promises);
+
+  console.log('@##$$', response);
 
   res.json({ stockPrices: response });
 };

@@ -6,12 +6,9 @@ import { WatchedStock } from 'models/watched-stock';
 export const listWatchedStocks = async (req: Request, res: Response) => {
   console.log('list watched stocks route hit');
 
-  const result = await knex
-    .table<WatchedStock>('watched-stocks')
-    .select()
-    .whereNotNull('deletedAt');
+  const result = await knex.table<WatchedStock>('watched_stocks').select().whereNull('deletedAt');
 
-  res.json(result);
+  res.json({ watchedStocks: result });
 };
 
 export const createWatchedStock = async (req: Request, res: Response) => {
@@ -23,7 +20,7 @@ export const createWatchedStock = async (req: Request, res: Response) => {
     res.send(400);
   }
 
-  const result = await knex.table<WatchedStock>('watched-stocks').insert(payload).returning('*');
+  const result = await knex.table<WatchedStock>('watched_stocks').insert(payload).returning('*');
 
   res.json(result);
 };
@@ -38,9 +35,11 @@ export const deleteWatchedStock = async (req: Request, res: Response) => {
   }
 
   const result = await knex
-    .table<WatchedStock>('watched-stocks')
+    .table<WatchedStock>('watched_stocks')
     .update({ deletedAt: new Date() })
     .where({ id: Number(watchedStockId) });
 
-  res.json(result);
+  res.json({
+    watchedStocks: result,
+  });
 };
