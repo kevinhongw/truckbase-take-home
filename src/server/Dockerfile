@@ -1,6 +1,6 @@
 FROM node:18-alpine
 
-RUN npm install -g ts-node
+RUN npm install -g ts-node knex
 
 WORKDIR /usr/app
 

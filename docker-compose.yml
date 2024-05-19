@@ -8,38 +8,43 @@ services:
     ports:
       - '5432:5432'
     environment:
+      PGUSER: local-user
       POSTGRES_DB: db
       POSTGRES_USER: local-user
       POSTGRES_PASSWORD: local-password
+    healthcheck:
+      test: pg_isready -U $$POSTGRES_USER -d db -h 127.0.0.1 -p 5432
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   adminer:
     image: adminer
     ports:
       - 8080:8080
 
-  # Comment out while in local
-  # server:
-  #   build: ./src/server
-  #   command: npm start
-  #   ports:
-  #     - '4000:4000'
-  #   volumes:
-  #     - ./src/server:/usr/app/
-  #     - /usr/app/node_modules
-  #   depends_on:
-  #     - db
+  server:
+    build: ./src/server
+    command: sh -c "npm run db:migrate && npm run db:seed && npm start"
+    ports:
+      - '4000:4000'
+    volumes:
+      - ./src/server:/usr/app/
+      - /usr/app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
 
-  # # Comment out while in local
-  # client:
-  #   build: ./src/client
-  #   command: npm start
-  #   ports:
-  #     - '3000:3000'
-  #   volumes:
-  #     - ./src/client:/usr/app
-  #     - /usr/app/node_modules
-  #   stdin_open: true
-  #   tty: true
-  #   depends_on:
-  #     - db
-  #     - server
+  client:
+    build: ./src/client
+    command: npm start
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./src/client:/usr/app
+      - /usr/app/node_modules
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
+      - server

@@ -4,7 +4,7 @@ const environments: string[] = ['development', 'staging', 'production'];
 
 export const connection: KnexType.ConnectionConfig = {
   user: process.env.POSTGRES_USER || 'local-user',
-  host: process.env.POSTGRES_HOST || 'localhost',
+  host: process.env.POSTGRES_HOST || 'db',
   database: process.env.POSTGRES_DB || 'db',
   password: process.env.POSTGRES_PASSWORD || 'local-password',
 };

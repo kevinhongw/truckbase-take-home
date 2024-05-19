@@ -1,5 +1,14 @@
 # Truckbase Take-Home Assignment: Real-Time Stock Dashboard
 
+## Directly spin up project
+
+```
+    // root folder
+    docker-compose up
+
+    // open localhost:3000
+```
+
 ## Objective
 
 Create a real-time stock market dashboard that displays stock prices and updates them periodically. The application should have a backend built with Node.js, a frontend with React.js, and utilize SQL for data management.
@@ -48,12 +57,12 @@ Database Schema:
 
 We're looking forward to seeing your approach to solving this challenge!
 
-## Install
+## Local dev environment setup
 
 ```
     // 1st tab
     // root folder
-    docker-compsoe up
+    docker-compose -f docker-compose.local.yml up
 
     // 2nd tab
     cd src/server
@@ -74,6 +83,8 @@ We're looking forward to seeing your approach to solving this challenge!
 ```
     cd src/server/src
     npx knex migrate:make create_users_table
+
+    // Latest migration file
     npx knex migrate:latest
 
     // Rollback last migration
@@ -83,7 +94,7 @@ We're looking forward to seeing your approach to solving this challenge!
     npx knex migrate:up
 ```
 
-### Seed
+### Seed Data
 
 ```
     cd src/server/src
